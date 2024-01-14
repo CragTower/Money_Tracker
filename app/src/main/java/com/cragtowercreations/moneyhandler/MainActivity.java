@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     // Declare Variables
     TextView availableFunds;
@@ -30,6 +32,15 @@ public class MainActivity extends AppCompatActivity {
 
         // OnClick listener assignment
         addTransactionButton.setOnClickListener(addTransactionButtonListener);
+
+        // On page creation call database to calculate Funds Available
+        calculateFundsAvailable();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calculateFundsAvailable();
     }
 
     private View.OnClickListener addTransactionButtonListener = new View.OnClickListener() {
@@ -39,4 +50,22 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    private void calculateFundsAvailable () {
+        List<Double> incomeList = DB.getAllIncomes();
+        List<Double> expenseList = DB.getAllExpenses();
+        Double incomes = 0.0;
+        Double expenses = 0.0;
+
+        for (int i = 0; i < incomeList.size(); i++) {
+            incomes += incomeList.get(i);
+        }
+
+        for (int i = 0; i < expenseList.size(); i++) {
+            expenses += expenseList.get(i);
+        }
+
+        Double funds = incomes - expenses;
+        availableFunds.setText(String.format("%.2f", funds));
+    }
 }

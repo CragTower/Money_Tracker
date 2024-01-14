@@ -1,8 +1,12 @@
 package com.cragtowercreations.moneyhandler;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppDatabase extends SQLiteOpenHelper {
 
@@ -12,7 +16,7 @@ public class AppDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME = "monthly_budget.db";
 
     // Variable for database version #
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     // Variable for table name
     private static final String TABLE_NAME = "monetaryTransactions";
@@ -92,4 +96,40 @@ public class AppDatabase extends SQLiteOpenHelper {
 
         int rowsDeleted = db.delete(TABLE_NAME, ID_COL + " = ?", new String[] {id});
     }
+
+    public List<Double> getAllIncomes () {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Double> incomeList = new ArrayList<>();
+
+        String sqlQuery = "SELECT " + INCOME_COL + " FROM " + TABLE_NAME + " WHERE " + INCOME_COL + " IS NOT NULL";
+        Cursor cursor = db.rawQuery(sqlQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                double income = cursor.getDouble(0);
+                incomeList.add(income);
+            } while (cursor.moveToNext());
+        }
+
+        return incomeList;
+    }
+
+    public List<Double> getAllExpenses () {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Double> expenseList = new ArrayList<>();
+
+        String sqlQuery = "SELECT " + EXPENSE_COL + " FROM " + TABLE_NAME + " WHERE " + EXPENSE_COL + " IS NOT NULL";
+        Cursor cursor = db.rawQuery(sqlQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                double expense = cursor.getDouble(0);
+                expenseList.add(expense);
+            } while (cursor.moveToNext());
+        }
+
+        return expenseList;
+    }
+
+
 }
