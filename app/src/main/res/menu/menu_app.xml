@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-  
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        app:showAsAction="always"
+        android:title=""
+        android:icon="@drawable/baseline_menu_24">
+
+        <menu>
+
+            <item
+                android:id="@+id/main_activity"
+                android:title="Main Page"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/transaction_add_activity"
+                android:title="Add Transaction"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/transaction_view_activity"
+                android:title="View Transactions"
+                app:showAsAction="never"/>
+
+        </menu>
+
+    </item>
+
 </menu>

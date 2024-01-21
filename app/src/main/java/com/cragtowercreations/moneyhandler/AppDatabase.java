@@ -81,20 +81,27 @@ public class AppDatabase extends SQLiteOpenHelper {
         long expenseId = db.insert(TABLE_NAME, null, values);
     }
 
-    public void deleteIncome (int incomeId) {
-        SQLiteDatabase db = this.getWritableDatabase();
+//    public void deleteIncome (int incomeId) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        String id = Integer.toString(incomeId);
+//
+//        int rowsDeleted = db.delete(TABLE_NAME, ID_COL + " = ?", new String[] {id});
+//    }
+//
+//    public void deleteExpense (int expenseId) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        String id = Integer.toString(expenseId);
+//
+//        int rowsDeleted = db.delete(TABLE_NAME, ID_COL + " = ?", new String[] {id});
+//    }
 
-        String id = Integer.toString(incomeId);
+    public void deleteEntry (int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        int rowsDeleted = db.delete(TABLE_NAME, ID_COL + " = ?", new String[] {id});
-    }
-
-    public void deleteExpense (int expenseId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        String id = Integer.toString(expenseId);
-
-        int rowsDeleted = db.delete(TABLE_NAME, ID_COL + " = ?", new String[] {id});
+        String position = Integer.toString(id);
+        int rowsDeleted = db.delete(TABLE_NAME, ID_COL + " = ?", new String[] {position});
     }
 
     public List<Double> getAllIncomes () {
@@ -110,6 +117,7 @@ public class AppDatabase extends SQLiteOpenHelper {
                 incomeList.add(income);
             } while (cursor.moveToNext());
         }
+        cursor.close();
 
         return incomeList;
     }
@@ -127,9 +135,16 @@ public class AppDatabase extends SQLiteOpenHelper {
                 expenseList.add(expense);
             } while (cursor.moveToNext());
         }
+        cursor.close();
 
         return expenseList;
     }
 
+    public Cursor getAllData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+
+        return cursor;
+    }
 
 }
